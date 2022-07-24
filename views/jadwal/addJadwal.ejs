@@ -1,0 +1,73 @@
+<%-include('../layouts/header.ejs')-%>
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+        navbar-scroll="true">
+        <div class="container-fluid py-1 px-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                    <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Jadwal</a>
+                    </li>
+                    <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Index</li>
+                </ol>
+            </nav>
+            <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4 d-flex justify-content-end" id="navbar">
+
+                <ul class="navbar-nav d-flex justify-content-end">
+
+                    <form action="/auth/logout" method="post">
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
+                                <i class="fa fa-user me-sm-1"></i>
+                                <button type="submit" style="border:none ;">
+                                    <span class="d-sm-inline d-none">Sign Out</span>
+                                </button>
+
+                            </a>
+                        </li>
+                    </form>
+                    <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                        <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                            <div class="sidenav-toggler-inner">
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                            </div>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End Navbar -->
+
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header pb-0 text-uppercase">
+                        <h6>Tambah Jadwal </h6>
+                    </div>
+                    <div class="container">
+                        <div class="px-0 pt-0 pb-2">
+                            <form role="form text-left" action="/jadwal/store" method="post" class=" mb-5">
+                                <div class="form-group">
+                                    <label for="">
+                                        <p class="mb-0">Jam</p>
+                                    </label>
+                                    <input type="time" class="form-control" name="jam" min="08:00" max="23:00">
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Tambah</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%-include('../layouts/footer.ejs')-%>

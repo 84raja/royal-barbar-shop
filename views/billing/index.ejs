@@ -1,0 +1,254 @@
+<%-include('../layouts/header.ejs')-%>
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    <div class="row mt-2" id="message">
+        <div class="col-md-12" id="text-message">
+            <% if (messages.error) { %>
+            <div class="alert alert-danger"><%- messages.error %> </div>
+            <% } %>
+            <% if (messages.success) { %>
+            <div class="alert alert-success"><%- messages.success %> </div>
+            <% } %>
+        </div>
+    </div>
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+        navbar-scroll="true">
+        <div class="container-fluid py-1 px-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                    <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">
+                            Billing</a>
+                    </li>
+                    <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Index</li>
+                </ol>
+            </nav>
+            <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4 d-flex justify-content-end" id="navbar">
+
+                <ul class="navbar-nav d-flex justify-content-end">
+
+                    <form action="/auth/logout" method="post">
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
+                                <i class="fa fa-user me-sm-1"></i>
+                                <button type="submit" style="border:none ;">
+                                    <span class="d-sm-inline d-none">Sign Out</span>
+                                </button>
+
+                            </a>
+                        </li>
+                    </form>
+                    <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                        <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                            <div class="sidenav-toggler-inner">
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                            </div>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- End Navbar -->
+    <!-- message -->
+    <div class="row mt-2" id="message">
+        <div class="col-md-12" id="text-message">
+            <% if (messages.error) { %>
+            <div class="alert alert-danger"><%- messages.error %> </div>
+            <% } %>
+            <% if (messages.success) { %>
+            <div class="alert alert-success"><%- messages.success %> </div>
+            <% } %>
+        </div>
+    </div>
+    <!-- end message -->
+    <% if (role == "Kasir") { %>
+    <div class="container-fluid py-4">
+        <div class="row" id="form-bayar">
+            <div class="col-md-12 mt-4">
+                <div class="card">
+                    <div class="card-header pb-0 px-3">
+                        <h6 class="mb-0"><button class="btn btn-sm btn-info text-sm" style="cursor:default">
+                                Form Bayar</button> </h6>
+                    </div>
+                    <div class="card-body pt-4 p-3 mx-4">
+                        <form role="form text-left" action="/transaksi/store" method="post" class=" mb-5">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="hidden" id="id_booking" name="id_booking">
+                                    <input type="hidden" id="harga" name="harga">
+                                    <div class="form-group">
+                                        <label for="">
+                                            <p class="mb-0">Nama Pelanggan :</p>
+                                        </label>
+                                        <input type="text" name="pelanggan" class="form-control " readonly
+                                            id="nama_pelanggan" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">
+                                            <p class="mb-0">Nama Kapster :</p>
+                                        </label>
+                                        <input type="text" name="kapster" class="form-control " id="kapster" readonly
+                                            required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="">
+                                            <p class="mb-0">Nama Layanan :</p>
+                                        </label>
+                                        <input type="text" name="layanan" class="form-control " id="layanan" readonly
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">
+                                            <p class="mb-0">Harga Layanan :</p>
+                                        </label>
+                                        <input type="text" class="form-control " id="harga_display" readonly required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center ">
+                                <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Bayar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+    <div class="row">
+        <div class="col-md-7 mt-4">
+            <div class="card">
+                <div class="card-header pb-0 px-3">
+                    <h6 class="mb-0"><span class="btn btn-sm text-sm btn-info" style="cursor:default"> Data Booking
+                            Aktif
+                            <%= tanggal %></span> </h6>
+                </div>
+                <div class="card-body pt-4 p-3" id="dataBooking">
+                    <ul class="list-group">
+                        <% datas.forEach(data => { %>
+                        <% if (data.status == "Booking") { %>
+                        <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                            <div class="d-flex flex-column">
+                                <h6 class="mb-3 text-sm"><%= data.tanggal%> / jam <%= data.jam%></h6>
+                                <span class="mb-2 text-xs">Pelanggan: <span
+                                        class="text-dark font-weight-bold ms-sm-2"><%= data.nama%></span></span>
+                                <span class="mb-2 text-xs">Kapster: <span
+                                        class="text-dark font-weight-bold ms-sm-2"><%= data.kapster%></span></span>
+                                <span class="mb-2 text-xs">Layanan: <span
+                                        class="text-dark ms-sm-2 font-weight-bold"><%= data.layanan%></span></span>
+                                <span class="text-xs">Harga: <span
+                                        class="text-dark ms-sm-2 font-weight-bold"><%= data.harga%></span></span>
+                            </div>
+                            <% if (role == "Kasir") { %>
+                            <div class="ms-auto text-end">
+                                <a class="btn btn-sm btn-success text-xs btnBayar" id="btnBayar" href="#form-bayar"
+                                    data-nama="<%= data.nama%>" data-kapster="<%= data.kapster%>"
+                                    data-layanan="<%= data.layanan%>" data-harga="<%= data.harga%>"
+                                    data-id="<%=data.id%>">Bayar</a>
+                                <form action="/billing/cancel/<%= data.id%> ?_method=PUT" method="post">
+                                    <button class="btn btn-sm btn-danger text-xxs">Cancel</button>
+                                </form>
+                            </div>
+                            <% } %>
+                        </li>
+                        <% } %>
+                        <% }) %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 mt-4">
+            <div class="card h-100 mb-4">
+                <div class="card-header pb-0 px-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="mb-0">Riwayat Transaksi</h6>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-end align-items-center">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body pt-4 p-3">
+                    <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">Newest</h6>
+                    <ul class="list-group">
+                        <% datas.forEach(data => { %>
+                        <% if (data.status == "Selesai") { %>
+                        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
+                            <div class="d-flex align-items-center">
+                                <button
+                                    class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 btn-sm d-flex align-items-center justify-content-center"><i
+                                        class="fas fa-arrow-up"></i></button>
+                                <div class="d-flex flex-column">
+                                    <h6 class="mb-1 text-dark text-sm"><%= data.nama%>
+                                    </h6>
+                                    <span class="mb-2 text-xs">Kapster: <span
+                                            class="text-dark font-weight-bold ms-sm-2"><%= data.kapster%></span></span>
+                                    <span class="mb-2 text-xs">Layanan: <span
+                                            class="text-dark ms-sm-2 font-weight-bold"><%= data.layanan%></span></span>
+                                    <span class="text-xs">Harga: <span
+                                            class="text-dark ms-sm-2 font-weight-bold"><%= data.harga%></span></span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center text-success text-gradient text-sm font-weight-bold">
+                                <%= data.status%>
+                            </div>
+                        </li>
+
+                        <% } %>
+                        <% }) %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <%-include('../layouts/footer.ejs')-%>
+
+
+    <script>
+        const inputIdBooking = document.getElementById('id_booking');
+        const inputNamaPelanggan = document.getElementById('nama_pelanggan');
+        const inputKapster = document.getElementById('kapster');
+        const inputLayanan = document.getElementById('layanan');
+        const inputHarga = document.getElementById('harga_display');
+        const inputHargaHidden = document.getElementById('harga');
+        $("#dataBooking").on("click", ".btnBayar", function () {
+
+            inputNamaPelanggan.value = $(this).attr("data-nama");
+            inputNamaPelanggan.setAttribute('readonly', 'true');
+
+            inputKapster.value = $(this).attr("data-kapster");
+            inputKapster.setAttribute('readonly', 'true');
+
+            inputLayanan.value = $(this).attr("data-layanan");
+            inputLayanan.setAttribute('readonly', 'true');
+
+
+            inputHarga.value = $(this).attr("data-harga");
+            inputHarga.setAttribute('readonly', 'true');
+
+            const harga = $(this).attr("data-harga");
+            const removeRP = harga.substring(4, 20)
+            const arrHarga = removeRP.split('.')
+            const hargaInt = arrHarga.join('');
+            inputHargaHidden.value = hargaInt;
+
+
+            inputIdBooking.value = $(this).attr("data-id")
+        })
+
+        setTimeout(
+            function () {
+                const mess = document.getElementById("message");
+                mess.remove();
+            }, 2000
+        )
+    </script>

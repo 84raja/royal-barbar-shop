@@ -1,0 +1,211 @@
+<%-include('../layouts/header.ejs')-%>
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+        navbar-scroll="true">
+        <div class="container-fluid py-1 px-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                    <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Booking
+                            Layanan</a>
+                    </li>
+                    <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Index</li>
+                </ol>
+            </nav>
+            <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4 d-flex justify-content-end" id="navbar">
+
+                <ul class="navbar-nav d-flex justify-content-end">
+
+                    <form action="/auth/logout" method="post">
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
+                                <i class="fa fa-user me-sm-1"></i>
+                                <button type="submit" style="border:none ;">
+                                    <span class="d-sm-inline d-none">Sign Out</span>
+                                </button>
+
+                            </a>
+                        </li>
+                    </form>
+                    <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                        <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                            <div class="sidenav-toggler-inner">
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                            </div>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header pb-0 text-uppercase">
+                        <h6>Booking Layanan </h6>
+                    </div>
+                    <div class="container">
+                        <div class="px-0 pt-0 pb-2">
+                            <form role="form text-left" action="/booking/store" method="post" class=" mb-5">
+                                <div class="form-group">
+                                    <label for="">
+                                        <p class="mb-0">Nama Pelanggan :</p>
+                                    </label>
+                                    <select name="id_user" id="role" class="form-control" required>
+                                        <option value="">Pilih Pelanggan</option>
+                                        <% users.forEach(user => { %>
+                                        <% if (user.role ==="Pelanggan") { %>
+                                        <option value="<%= user.id %>"><%= user.nama %> </option>
+                                        <% } %>
+
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">
+                                        <p class="mb-0">Tangal :</p>
+                                    </label>
+                                    <input type="date" class="form-control" name="tanggal" id="tanggal">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">
+                                        <p class="mb-0">Kapster :</p>
+                                    </label>
+                                    <select name="id_kapster" id="kapster" class="form-control" required>
+                                        <option value="">Pilih Kapster</option>
+                                        <% kapsters.forEach(kapster => { %>
+                                        <option value="<%= kapster.id %>"><%= kapster.nama %> </option>
+
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">
+                                        <p class="mb-0">Layanan :</p>
+                                    </label>
+                                    <select name="id_layanan" id="role" class="form-control" required>
+                                        <option value="">Pilih Layanan</option>
+                                        <% services.forEach(service => { %>
+                                        <option value="<%= service.id %>"><%= service.nama_layanan %> |
+                                            <%= service.harga %> </option>
+
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">
+                                        <p class="mb-0">Jadwal :</p>
+                                    </label>
+                                    <select name="id_jadwal" id="jadwal" class="form-control" required>
+                                        <option value="">Pilih Jadwal</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="">
+                                        <p class="mb-0">Tinggalkan Pesan :</p>
+                                    </label>
+                                    <textarea name="pesan" class="form-control" cols="30" rows="10"></textarea>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Tambah</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%-include('../layouts/footer.ejs')-%>
+    <script>
+        //minimal date today
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        today = yyyy + '-' + mm + '-' + dd;
+        document.getElementById("tanggal").setAttribute("min", today);
+        document.getElementById("tanggal").value = today;
+        //
+        //jam sekarang
+        const timeNow = new Date().getHours() + ":" + new Date().getMinutes();
+        const arrTimeNow = timeNow.split(':')
+        if (arrTimeNow[0] < 10) {
+            arrTimeNow[0] = '0' + arrTimeNow[0];
+        }
+        if (arrTimeNow[1] < 10) {
+            arrTimeNow[1] = '0' + arrTimeNow[1];
+        }
+        const timeNowNew = arrTimeNow.join(":");
+
+
+        const kapster = document.getElementById('kapster');
+        const tanggal = document.getElementById('tanggal');
+        const inputJadwal = document.getElementById('jadwal');
+
+        kapster.addEventListener('click', setJadwal)
+
+        function setJadwal() {
+            kapster.setAttribute("selected", "")
+            clearDropDown()
+            if (kapster.value != "") {
+                fetch(`/booking/jadwal-kapster/${kapster.value}/${tanggal.value}`)
+                    .then(res => res.json())
+                    .then(res => {
+
+                        res[0].map(jd => {
+
+                            if (jd.jam < timeNowNew && tanggal.value == today && jd.jam !== "--:--") {
+                                var jadwalSelect = document.getElementById("jadwal");
+                                var option = document.createElement("option");
+                                option.text = `${jd.jam} - Jam Sudah Lewat`;
+                                option.value = jd.id_jadwal;
+                                option.disabled = true;
+                                jadwalSelect.add(option);
+                            } else if (res[1].includes(jd.id_jadwal)) {
+                                var jadwalSelect = document.getElementById("jadwal");
+                                var option = document.createElement("option");
+                                option.text = `${jd.jam} - already booked`;
+                                option.value = jd.id_jadwal;
+                                option.disabled = true;
+                                jadwalSelect.add(option);
+                            } else {
+                                var jadwalSelect = document.getElementById("jadwal");
+                                var option = document.createElement("option");
+                                option.text = `${jd.jam}`;
+                                option.value = jd.id_jadwal;
+                                jadwalSelect.add(option);
+                            }
+                        })
+                    })
+                    .catch(err => console.log(err))
+            }
+        }
+
+        function clearDropDown() {
+            var select = document.getElementById("jadwal"),
+                length = select.options.length;
+            while (length--) {
+                select.remove(length);
+            }
+            var option = document.createElement("option");
+            option.text = `Pilih Jadwal`;
+            option.value = "";
+            select.add(option);
+        }
+    </script>

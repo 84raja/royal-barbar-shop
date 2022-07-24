@@ -1,0 +1,192 @@
+<%-include('../layouts/header.ejs')-%>
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+        navbar-scroll="true">
+        <div class="container-fluid py-1 px-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                    <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Booking</a>
+                    </li>
+                    <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Index</li>
+                </ol>
+            </nav>
+            <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4 d-flex justify-content-end" id="navbar">
+
+                <ul class="navbar-nav d-flex justify-content-end">
+
+                    <form action="/auth/logout" method="post">
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
+                                <i class="fa fa-user me-sm-1"></i>
+                                <button type="submit" style="border:none ;">
+                                    <span class="d-sm-inline d-none">Sign Out</span>
+                                </button>
+
+                            </a>
+                        </li>
+                    </form>
+                    <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                        <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                            <div class="sidenav-toggler-inner">
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                            </div>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="row mt-2" id="message">
+        <div class="col-md-12" id="text-message">
+            <% if (messages.error) { %>
+            <div class="alert alert-danger"><%- messages.error %> </div>
+            <% } %>
+            <% if (messages.success) { %>
+            <div class="alert alert-success"><%- messages.success %> </div>
+            <% } %>
+        </div>
+    </div>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-12">
+                    <div class="card-header pb-0 text-uppercase d-flex justify-content-between">
+                        <div class="mr-3">
+                            <h6>Table Booking <%= title_page %> (<%= tanggal %>)</h6>
+                            <div>
+                                <form action="/booking/cari-booking" method="post">
+
+                                    <div class="input-group">
+                                        <button style="border:none ;">
+                                            <span class="input-group-text text-body"><i class="fas fa-search"
+                                                    aria-hidden="true"></i></span>
+                                        </button>
+                                        <input type="date" class="form-control" name="tgl" id="tgl" value="<%=tanggal%>"
+                                            onfocus="focused(this)" onfocusout="defocused(this)" required>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end col-md-4">
+
+                            <div>
+                                <form action="/booking/report-booking" method="post">
+
+                                    <div class="input-group">
+
+                                        <input type="date" class="form-control" name="tanggal1" required>
+
+                                    </div>
+                                    <div class="input-group">
+
+                                        <input type="date" class="form-control" name="tanggal2" required>
+
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button class="btn btn-success btn-sm  text-xs mr-2" id="button-update">Download
+                                        </button>
+                                    </div>
+                                </form>
+
+                            </div>
+                            <% if (role == "Kasir") { %>
+                            <div>
+                                <a href="/booking/add" class="btn btn-info btn-sm  text-xxs mr-2"
+                                    id="button-update">Tambah Booking</a>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center mb-0" id="user-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7"
+                                            width="10%">
+                                            No</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7 ps-2">
+                                            Nama Pelanggan</th>
+                                        <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7">
+                                            Kapster</th>
+                                        <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7">
+                                            Layanan</th>
+                                        <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7">
+                                            Tanggal - Jam</th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-sm font-weight-bolder opacity-7">
+                                            Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% datas.forEach((element,index) => { %>
+                                    <tr>
+                                        <td class="align-middle mx-2 text-sm">
+                                            <h6 class="mb-0 mx-3 text-xs"><%= index+1 %> </h6>
+                                        </td>
+                                        <td>
+                                            <p class="text-xs font-weight-bold mb-0"><%= element.nama %></p>
+                                        </td>
+                                        <td class="align-middle text-xs">
+                                            <p class="text-xs font-weight-bold mb-0"><%= element.kapster %></p>
+
+                                        </td>
+                                        <td class="align-middle ">
+                                            <p class="text-xs font-weight-bold mb-0"><%= element.layanan %></p>
+
+                                        </td>
+                                        <td class="align-middle">
+                                            <p class="text-xs font-weight-bold mb-0"><%= element.tanggal %>
+                                                /<%= element.jam %></p>
+
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <% if (element.status === "Booking") { %>
+                                            <p class="text-xs btn  font-weight-bold mb-0">
+                                                <%= element.status %></p>
+                                            <% }else if(element.status === "Selesai") {%>
+                                            <p class="text-xs btn btn-success  font-weight-bold mb-0">
+                                                <%= element.status %></p>
+                                            <% }else{ %>
+                                            <p class="text-xs btn btn-danger  font-weight-bold mb-0">
+                                                <%= element.status %></p>
+                                            <% } %>
+
+                                        </td>
+                                        <!-- <td class="align-middle">
+
+                                            <% if (element.status === "Booking") { %>
+                                            <div class="d-flex justify-content-center">
+                                                <form action="/booking/done/<%= element.id %>?_method=PUT "
+                                                    method="post">
+                                                    <button class="btn btn-info btn-sm ml-2"
+                                                        onclick="return confirm('yakin Ingin Menyelesaikan Booking?')">Selesai</button>
+                                                </form>
+                                                <form action="/booking/cancel/<%= element.id %>?_method=PUT "
+                                                    method="post">
+                                                    <button class="btn btn-danger btn-sm ml-2"
+                                                        onclick="return confirm('yakin Ingin membatalkan booking ?')">Batal</button>
+                                                </form>
+                                            </div>
+                                            <% } %>
+                                        </td> -->
+                                    </tr>
+                                    <% }) %>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%-include('../layouts/footer.ejs')-%>

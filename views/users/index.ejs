@@ -1,0 +1,141 @@
+<%-include('../layouts/header.ejs')-%>
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+        navbar-scroll="true">
+        <div class="container-fluid py-1 px-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+                    <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Users</a>
+                    </li>
+                    <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Index</li>
+                </ol>
+            </nav>
+            <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4 d-flex justify-content-end" id="navbar">
+
+                <ul class="navbar-nav d-flex justify-content-end">
+
+                    <form action="/auth/logout" method="post">
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
+                                <i class="fa fa-user me-sm-1"></i>
+                                <button type="submit" style="border:none ;">
+                                    <span class="d-sm-inline d-none">Sign Out</span>
+                                </button>
+
+                            </a>
+                        </li>
+                    </form>
+                    <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                        <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                            <div class="sidenav-toggler-inner">
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                                <i class="sidenav-toggler-line"></i>
+                            </div>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End Navbar -->
+    <div class="row mt-2" id="message">
+        <div class="col-md-12" id="text-message">
+            <% if (messages.error) { %>
+            <div class="alert alert-danger"><%- messages.error %> </div>
+            <% } %>
+            <% if (messages.success) { %>
+            <div class="alert alert-success"><%- messages.success %> </div>
+            <% } %>
+        </div>
+    </div>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header pb-0 text-uppercase d-flex justify-content-between">
+                        <h6><%= page_name %> table</h6>
+                        <a href="/users/add" class="btn btn-info btn-sm font-weight-bold text-xs mr-2"
+                            id="button-update">Tambah</a>
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center mb-0" id="user-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7"
+                                            width="10%">
+                                            No</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7 ps-2">
+                                            Nama</th>
+                                        <th class="text-uppercase text-secondary text-sm font-weight-bolder opacity-7">
+                                            Email</th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-sm font-weight-bolder opacity-7">
+                                            No Telp</th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-sm font-weight-bolder opacity-7">
+                                            Alamat</th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-sm font-weight-bolder opacity-7">
+                                            Role</th>
+                                        <th class="text-secondary opacity-7"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% data.forEach((element,index) => { %>
+                                    <tr>
+                                        <td class="align-middle mx-2 text-sm">
+                                            <h6 class="mb-0 mx-3 text-xs"><%= index+1 %> </h6>
+                                        </td>
+                                        <td>
+                                            <p class="text-xs font-weight-bold mb-0"><%= element.nama %></p>
+                                        </td>
+                                        <td class="align-middle text-xs">
+                                            <p class="text-xs font-weight-bold mb-0"><%= element.email %></p>
+
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <p class="text-xs font-weight-bold mb-0"><%= element.no_telp %></p>
+
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <p class="text-xs font-weight-bold mb-0"><%= element.alamat %></p>
+
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <p class="text-xs font-weight-bold mb-0"><%= element.role %></p>
+
+                                        </td>
+                                        <td class="align-middle">
+
+                                            <div class="d-flex justify-content-center">
+                                                <a href="/users/edit/<%= element.id %> "
+                                                    class="btn btn-info btn-sm font-weight-bold text-xs mr-2"
+                                                    id="button-update">Ubah</a>
+                                                <form action="/users/destroy/<%- element.id %>?_method=DELETE "
+                                                    method="post">
+                                                    <button class="btn btn-danger btn-sm ml-2"
+                                                        onclick="return confirm('yakin Ingin Menghapus data?')">Hapus</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <%-include('../layouts/footer.ejs')-%>
