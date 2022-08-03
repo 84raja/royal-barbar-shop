@@ -39,7 +39,7 @@ module.exports = {
               if (err) {
                 reject(err);
               }
-              resolve(user[0].nama);
+              resolve(user[0]);
             });
           });
         }
@@ -85,13 +85,14 @@ module.exports = {
           return tgl;
         }
 
-        const userName = await getUser();
+        const user = await getUser();
         const kapsterName = await getKapster();
         const serviceName = await getService();
         const jam = await getJadwal();
         return {
           id: data.id,
-          nama: userName,
+          no_telp: user.no_telp,
+          nama: user.nama,
           kapster: kapsterName,
           layanan: serviceName,
           jam: jam,

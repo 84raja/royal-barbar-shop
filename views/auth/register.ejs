@@ -107,6 +107,12 @@
                                             aria-label="Email" aria-describedby="email-addon" required>
                                     </div>
                                     <div class="mb-3">
+                                        <input type="text" class="form-control" name="no_telp" placeholder="No HP"
+                                            aria-label="Email" aria-describedby="email-addon"
+                                            onkeypress="return onlyNumberKey(event)" maxlength="12" minlength="11"
+                                            size="50%" required>
+                                    </div>
+                                    <div class="mb-3">
                                         <input type="password" class="form-control" name="password"
                                             placeholder="Password" aria-label="Password"
                                             aria-describedby="password-addon" required>
@@ -155,6 +161,19 @@
                 damping: '0.5'
             }
             Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        }
+
+        function onlyNumberKey(evt) {
+
+            // Only ASCII character in that range allowed
+            var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+            if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57)) {
+                return false;
+
+            } else {
+
+                return true;
+            }
         }
     </script>
     <!-- Github buttons -->

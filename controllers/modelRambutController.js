@@ -62,15 +62,19 @@ module.exports = {
   },
   update: (req, res) => {
     const { id } = req.params;
-    const foto = req.file.filename;
     const { model, keterangan } = req.body;
-    const formData = {
+    let formData = {
       model,
-      foto,
       keterangan,
     };
     if (req.file) {
       console.log("ada file");
+      const foto = req.file.filename;
+      formData = {
+        model,
+        foto,
+        keterangan,
+      };
       Model.getById(req.db, id, async (err, model) => {
         console.log("ada foto di images");
 

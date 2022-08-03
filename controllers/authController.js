@@ -6,11 +6,12 @@ module.exports = {
     res.render("auth/register", { name_page: "register" });
   },
   postRegister: (req, res) => {
-    const { nama, email, password } = req.body;
+    const { nama, email, password, no_telp } = req.body;
     const passwordHash = bcrypt.hashSync(password, 10);
     const dataForm = {
       nama,
       email,
+      no_telp,
       password: passwordHash,
     };
     User.store(req.db, dataForm, (err, result) => {
@@ -37,9 +38,11 @@ module.exports = {
         result.length === 0 ||
         !bcrypt.compareSync(password, result[0].password)
       ) {
+        console.log(result.length);
         req.flash("error", `Masukan email dan password dengan benar !`);
         res.redirect("/auth/login");
       } else {
+        console.log(result.length);
         req.session.loggedin = true;
         req.session.idUser = result[0].id;
         req.session.nama = result[0].nama;
