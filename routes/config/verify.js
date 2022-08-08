@@ -1,7 +1,7 @@
 module.exports = {
   isLogin(req, res, next) {
     if (req.session.loggedin === true) {
-    next();
+      next();
       return;
     } else {
       req.flash("error", `Silahkan Login Terlebih Dahulu !`);
@@ -14,7 +14,10 @@ module.exports = {
     if (req.session.loggedin !== true) {
       next();
       return;
+    } else if (req.session.role == "Pelanggan") {
+      res.redirect("/customer/home");
+    } else {
+      res.redirect("/billing");
     }
-    res.redirect("/services");
   },
 };

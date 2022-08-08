@@ -48,32 +48,46 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0 text-uppercase d-flex justify-content-between">
-                        <div class=" col-md-4 mr-3">
+                        <div class="col-md-2">
                             <h6>Table Transaksi <br> (<%= tanggal1  %> s/d <%= tanggal2  %>)</h6>
                         </div>
-                        <div class="col-md-8">
+                        <div class="mb-4">
+                            <form action="/transaksi/donwload-laporan-bulanan" method="post">
+                                <div>
+                                    <label for="" class="text-sm">Laporan Bulanan </label>
+                                    <input type="month" class="form-control" name="monthAndYear" required>
+                                    <div class="d-flex justify-content-end mt-1">
+                                        <button type="submit" class="btn btn-info btn-xs text-xs">download
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
                             <form action="/transaksi/lihat" method="post">
                                 <div class="row d-flex justify-content-end">
                                     <div class="col-md-4">
                                         <label for="" class="text-sm">Dari </label>
                                         <input type="date" class="form-control" name="tanggal1" value="<%= tanggal1 %>"
                                             required>
+                                        <div class="d-flex justify-content-end mt-1">
+                                            <button class="btn btn-success btn-sm  text-sm" type="submit">Lihat
+                                            </button>
+                                        </div>
+
                                     </div>
                                     <div class="col-md-4">
                                         <label for="" class="text-sm">Sampai </label>
                                         <input type="date" class="form-control" name="tanggal2" value="<%= tanggal2 %>"
                                             required>
-                                        <div class="d-flex justify-content-between mt-1">
-                                            <button class="btn btn-success btn-sm  text-xxs mr-2"
-                                                id="button-update">Lihat
-                                            </button>
+                                        <div class="d-flex justify-content-end mt-1">
+
                                             <a href="/transaksi/download/<%=tanggal1%>/<%=tanggal2%>"
-                                                class="btn btn-info btn-xs  text-xs mr-2">download
+                                                class="btn btn-info btn-xs text-xxs">download
                                             </a>
                                         </div>
                                     </div>
                             </form>
-
 
                         </div>
                     </div>

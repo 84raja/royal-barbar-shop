@@ -10,5 +10,10 @@ router.get(
   verifyUser.isLogin,
   transaksiController.download
 );
+router.post(
+  "/donwload-laporan-bulanan",
+  verifyUser.isLogin,
+  transaksiController.downloadMonth
+);
 
 module.exports = router;

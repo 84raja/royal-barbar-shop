@@ -225,4 +225,94 @@ module.exports = {
       }
     );
   },
+  downloadMonth: async (req, res) => {
+    const { monthAndYear } = req.body;
+    const arrMonthAndYear = monthAndYear.split("-");
+    const year = arrMonthAndYear[0];
+    const month = arrMonthAndYear[1];
+    console.log(year, month);
+    function getData() {
+      return new Promise((resolve, reject) => {
+        Transaksi.getMonth(req.db, month, (err, transaksi) => {
+          if (err) {
+            reject(console.log(err));
+          }
+          const datas = transaksi.map((data) => {
+            function tanggalToString() {
+              const yyyy = data.tanggal.getFullYear();
+              let mm = data.tanggal.getMonth() + 1; // Months start at 0!
+              let dd = data.tanggal.getDate();
+
+              if (dd < 10) dd = "0" + dd;
+              if (mm < 10) mm = "0" + mm;
+
+              const tgl = `${dd}-${mm}-${yyyy}`;
+              return tgl;
+            }
+            //int to string
+            const harga = data.harga.toLocaleString("id-ID", {
+              style: "currency",
+              currency: "IDR",
+            });
+            return {
+              pelanggan: data.pelanggan,
+              layanan: data.layanan,
+              kapster: data.kapster,
+              harga: data.harga,
+              tanggal: tanggalToString(),
+            };
+          });
+          resolve(datas);
+        });
+      });
+    }
+
+    const data = {
+      data: await getData(),
+      month: month,
+      year: year,
+      tanggalSekarang: fnTanggal(),
+    };
+
+    if (fs.existsSync(`report-transaksi-bulanan.pdf`)) {
+      fs.unlink(`report-transaksi-bulanan.pdf`, (err) => {
+        if (err) throw err;
+        console.log("successfully deleted");
+      });
+    }
+    //make pdf and download file
+    ejs.renderFile(
+      path.join(
+        __dirname,
+        "../views/transaksi",
+        "report-transaksi-bulanan.ejs"
+      ),
+      { datas: data },
+      (err, data) => {
+        if (err) {
+          res.send(err);
+        } else {
+          let options = {
+            height: "11.25in",
+            width: "8.5in",
+            header: {
+              height: "20mm",
+            },
+            footer: {
+              height: "20mm",
+            },
+          };
+          pdf
+            .create(data, options)
+            .toFile("report-transaksi-bulanan.pdf", function (err, data) {
+              if (err) {
+                res.send(err);
+              } else {
+                res.download("report-transaksi-bulanan.pdf");
+              }
+            });
+        }
+      }
+    );
+  },
 };

@@ -20,6 +20,7 @@ var kapsterRouter = require("./routes/kapster");
 var modelRambutRouter = require("./routes/modelRambut");
 var servicesRouter = require("./routes/services");
 var transaksiRouter = require("./routes/transaksi");
+var logRouter = require("./routes/log");
 
 var app = express();
 
@@ -47,7 +48,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
+app.get("/", (req, res) => {
+  res.redirect("/auth/login");
+});
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
 app.use("/billing", billingRouter);
@@ -58,7 +61,7 @@ app.use("/model-rambut", modelRambutRouter);
 app.use("/services", servicesRouter);
 app.use("/transaksi", transaksiRouter);
 app.use("/kapster", kapsterRouter);
-
+app.use("/log", logRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

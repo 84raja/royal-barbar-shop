@@ -1,9 +1,25 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
+const log = require("../models/log");
+
+function fnTanggalToday() {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1; // Months start at 0!
+  let dd = today.getDate();
+
+  if (dd < 10) dd = "0" + dd;
+  if (mm < 10) mm = "0" + mm;
+
+  const tanggal = `${yyyy}-${mm}-${dd}`;
+  return tanggal;
+}
 
 module.exports = {
   register: (req, res) => {
-    res.render("auth/register", { name_page: "register" });
+    res.render("auth/register", {
+      name_page: "register",
+    });
   },
   postRegister: (req, res) => {
     const { nama, email, password, no_telp } = req.body;
@@ -23,11 +39,71 @@ module.exports = {
       res.redirect("/auth/login");
     });
   },
-  login: (req, res) => {
-    res.render("auth/login", { name_page: "register" });
+  login: async (req, res) => {
+    async function cekDate() {
+      return new Promise((resolve, reject) => {
+        log.getById(req.db, 1, (err, result) => {
+          if (err) {
+            reject(console.log(err));
+            res.end();
+          }
+          resolve(result[0]);
+        });
+      });
+    }
+    const dataLog = await cekDate();
+    const tanggalLog = dataLog.tanggal;
+    let record_login = dataLog.record_login;
+
+    if (tanggalLog != fnTanggalToday()) {
+      log.update(
+        req.db,
+        1,
+        { record_login: 1, tanggal: fnTanggalToday() },
+        async (err, result) => {
+          if (err) {
+            console.log(err);
+            res.end();
+          }
+          const data = await cekDate();
+          record_login = data.record_login;
+        }
+      );
+    }
+    res.render("auth/login", {
+      name_page: "register",
+      pengunjung: record_login,
+    });
   },
-  postLogin: (req, res) => {
+  postLogin: async (req, res) => {
     const { email, password } = req.body;
+
+    //update log pengunjung
+    async function cekDate() {
+      return new Promise((resolve, reject) => {
+        log.getById(req.db, 1, (err, result) => {
+          if (err) {
+            reject(console.log(err));
+            res.end();
+          }
+          resolve(result[0]);
+        });
+      });
+    }
+    const dataLog = await cekDate();
+    const tanggalLog = dataLog.tanggal;
+    if (tanggalLog == fnTanggalToday()) {
+      let data = await cekDate();
+      let record_login = data.record_login + 1;
+      console.log(record_login);
+      log.update(req.db, 1, { record_login }, async (err, result) => {
+        if (err) {
+          console.log(err);
+          res.end();
+        }
+      });
+    }
+    // end update log pengunjung
 
     User.getByEmail(req.db, email, (err, result) => {
       if (err) {

@@ -5,6 +5,12 @@ module.exports = {
       callback
     );
   },
+  getMonth: (db, month, callback) => {
+    db.query(
+      `SELECT * FROM transaksi WHERE MONTH (tanggal) = ${month}`,
+      callback
+    );
+  },
   store: (db, data, callback) => {
     db.query(`INSERT INTO transaksi SET ?`, data, callback);
   },
