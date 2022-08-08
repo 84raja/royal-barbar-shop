@@ -6,7 +6,10 @@ module.exports = {
     db.query("SELECT * FROM booking WHERE id = " + id, callback);
   },
   getByTanggal: (db, tgl, callback) => {
-    db.query(`SELECT * FROM booking WHERE tanggal = ${tgl} `, callback);
+    db.query(
+      `SELECT * FROM booking WHERE tanggal = ${tgl} ORDER BY id DESC `,
+      callback
+    );
   },
   getBetweenTanggal: (db, tgl1, tgl2, callback) => {
     db.query(

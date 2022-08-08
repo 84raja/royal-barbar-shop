@@ -27,34 +27,6 @@ module.exports = {
       });
     }
     const dataLog = await cekDate();
-    const tanggalLog = dataLog.tanggal;
-    if (tanggalLog != fnTanggalToday()) {
-      log.update(
-        req.db,
-        1,
-        { record_login: 1, tanggal: fnTanggalToday() },
-        async (err, result) => {
-          if (err) {
-            console.log(err);
-            res.end();
-          }
-          const record_login = await cekDate();
-          console.log(record_login);
-          res.send(record_login);
-        }
-      );
-    } else {
-      let data = await cekDate();
-      let record_login = data.record_login + 1;
-      console.log(record_login);
-      log.update(req.db, 1, { record_login }, async (err, result) => {
-        if (err) {
-          console.log(err);
-          res.end();
-        }
-        const record_login = await cekDate();
-        res.send(record_login);
-      });
-    }
+    res.send(dataLog);
   },
 };

@@ -7,8 +7,21 @@ let pdf = require("html-pdf");
 let path = require("path");
 let ejs = require("ejs");
 const fs = require("fs");
+const log = require("../models/log");
 
 function fnTanggal() {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1; // Months start at 0!
+  let dd = today.getDate();
+
+  if (dd < 10) dd = "0" + dd;
+  if (mm < 10) mm = "0" + mm;
+
+  const tanggal = `"${yyyy}-${mm}-${dd}"`;
+  return tanggal;
+}
+function fnTanggal2() {
   const today = new Date();
   const yyyy = today.getFullYear();
   let mm = today.getMonth() + 1; // Months start at 0!
@@ -29,6 +42,16 @@ module.exports = {
         req.flash("error", "gagal mengambil data !");
         res.render("booking/index", { page_name: "booking", datas: [] });
       }
+
+      // update log new booking to 0
+      log.update(req.db, 1, { new_booking: 0 }, async (err, result) => {
+        if (err) {
+          console.log(err);
+          res.end();
+        }
+      });
+
+      // end update
 
       const dataBooking = datas.map(async (data) => {
         const id_user = data.id_user;
@@ -124,6 +147,16 @@ module.exports = {
         req.flash("error", "gagal mengambil data !");
         res.render("booking/index", { page_name: "booking", datas: [] });
       }
+
+      // update log new booking to 0
+      log.update(req.db, 1, { new_booking: 0 }, async (err, result) => {
+        if (err) {
+          console.log(err);
+          res.end();
+        }
+      });
+
+      // end update
 
       const dataBooking = datas.map(async (data) => {
         const id_user = data.id_user;

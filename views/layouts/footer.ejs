@@ -19,6 +19,13 @@
     </div>
 </footer> -->
 <!-- footer main end -->
+<% if (role == "Kasir") { %>
+<div id="tempat-notif">
+    <!-- <div class="row mt-2 alert alert-success" id="notif">
+            4 Booking Baru
+        </div> -->
+</div>
+<% } %>
 </div>
 </main>
 
@@ -44,6 +51,7 @@
 <script async defer src="https://buttons.github.io/buttons.js"></script>
 <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="../../assets/js/soft-ui-dashboard.min.js?v=1.0.6"></script>
+
 <!-- my script -->
 <script>
     function onlyNumberKey(evt) {
@@ -65,6 +73,28 @@
             mess.remove();
         }, 2000
     )
+
+    setInterval(() => {
+
+        fetch(`/log`)
+            .then(res => res.json())
+            .then(res => {
+                console.log(res.new_booking)
+                if (res.new_booking == 0) {
+                    const divNotif = document.getElementById("notif");
+                    if (divNotif != null) {
+                        divNotif.remove();
+                    }
+                } else {
+                    const divNotif = document.createElement("div");
+                    document.getElementById("tempat-notif").appendChild(divNotif).setAttribute("id",
+                        "notif")
+                    document.getElementById("notif").setAttribute("class", "row mt-2 alert alert-success");
+                    document.getElementById("notif").innerHTML = "Pelanggan Baru Saja Melakukan Booking"
+                }
+            }).catch(err => console.log(err))
+
+    }, 3000)
 </script>
 <!-- end my script -->
 </body>

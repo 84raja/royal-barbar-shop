@@ -78,7 +78,7 @@ module.exports = {
   postLogin: async (req, res) => {
     const { email, password } = req.body;
 
-    //update log pengunjung
+    //hitung log pengunjung
     async function cekDate() {
       return new Promise((resolve, reject) => {
         log.getById(req.db, 1, (err, result) => {
@@ -103,7 +103,7 @@ module.exports = {
         }
       });
     }
-    // end update log pengunjung
+    // end hitung log pengunjung
 
     User.getByEmail(req.db, email, (err, result) => {
       if (err) {

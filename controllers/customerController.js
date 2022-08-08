@@ -4,6 +4,20 @@ const Kapster = require("../models/kapsterModel");
 const Service = require("../models/serviceModel");
 const Jadwal = require("../models/jadwalModel");
 const Model = require("../models/modelRambutModel");
+const log = require("../models/log");
+
+function fnTanggalToday() {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1; // Months start at 0!
+  let dd = today.getDate();
+
+  if (dd < 10) dd = "0" + dd;
+  if (mm < 10) mm = "0" + mm;
+
+  const tanggal = `${yyyy}-${mm}-${dd}`;
+  return tanggal;
+}
 
 module.exports = {
   home: async (req, res) => {
@@ -225,7 +239,7 @@ module.exports = {
       role: req.session.role,
     });
   },
-  storeBooking: (req, res) => {
+  storeBooking: async (req, res) => {
     const { id_user, id_kapster, id_layanan, id_jadwal, tanggal, pesan } =
       req.body;
     const FormData = {
@@ -236,11 +250,40 @@ module.exports = {
       tanggal,
       pesan,
     };
-    Booking.store(req.db, FormData, (err, result) => {
+
+    Booking.store(req.db, FormData, async (err, result) => {
       if (err) {
         console.log(err);
         res.redirect("/customer/home");
       }
+
+      //hitung log boking baru
+      async function cekDate() {
+        return new Promise((resolve, reject) => {
+          log.getById(req.db, 1, (err, result) => {
+            if (err) {
+              reject(console.log(err));
+              res.end();
+            }
+            resolve(result[0]);
+          });
+        });
+      }
+      const dataLog = await cekDate();
+      const tanggalLog = dataLog.tanggal;
+      if (tanggalLog == fnTanggalToday()) {
+        let data = await cekDate();
+        let new_booking = data.new_booking + 1;
+        console.log(new_booking);
+        log.update(req.db, 1, { new_booking }, async (err, result) => {
+          if (err) {
+            console.log(err);
+            res.end();
+          }
+        });
+      }
+      // end hitung
+
       req.flash("success", "Berhasil Melakukan Booking");
       res.redirect("/customer/home");
     });
