@@ -1,5 +1,22 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
+let pdf = require("html-pdf");
+let path = require("path");
+let ejs = require("ejs");
+const fs = require("fs");
+
+function fnTanggal() {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1; // Months start at 0!
+  let dd = today.getDate();
+
+  if (dd < 10) dd = "0" + dd;
+  if (mm < 10) mm = "0" + mm;
+
+  const tanggal = `${yyyy}-${mm}-${dd}`;
+  return tanggal;
+}
 
 module.exports = {
   index: (req, res) => {
@@ -137,5 +154,70 @@ module.exports = {
       req.flash("success", "Data berhasil dihapus");
       res.redirect("/users");
     });
+  },
+
+  print: async (req, res) => {
+    function getUser() {
+      return new Promise((resolve, reject) => {
+        User.getAll(req.db, (err, users) => {
+          if (err) {
+            reject(console.log(err));
+          }
+          const data = users.map((user) => {
+            return {
+              id: user.id,
+              nama: user.nama.toUpperCase(),
+              email: user.email,
+              no_telp: user.no_telp,
+              alamat: user.alamat,
+              role: user.role,
+            };
+          });
+          resolve(data);
+        });
+      });
+    }
+
+    if (fs.existsSync(`report-user.pdf`)) {
+      fs.unlink(`report-user.pdf`, (err) => {
+        if (err) throw err;
+        console.log("successfully deleted");
+      });
+    }
+    const data = {
+      data: await getUser(),
+      tanggalSekarang: fnTanggal(),
+    };
+    console.log(data);
+
+    ejs.renderFile(
+      path.join(__dirname, "../views/users", "report-user.ejs"),
+      { datas: data },
+      (err, data) => {
+        if (err) {
+          res.send(err);
+        } else {
+          let options = {
+            height: "11.25in",
+            width: "8.5in",
+            header: {
+              height: "20mm",
+            },
+            footer: {
+              height: "20mm",
+            },
+          };
+          pdf
+            .create(data, options)
+            .toFile("report-user.pdf", function (err, data) {
+              if (err) {
+                res.send(err);
+              } else {
+                res.download("report-user.pdf");
+              }
+            });
+        }
+      }
+    );
   },
 };

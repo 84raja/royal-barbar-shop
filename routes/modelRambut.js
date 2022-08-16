@@ -39,5 +39,6 @@ router.delete(
   verifyUser.isLogin,
   modelRambutController.destroy
 );
+router.get("/print", verifyUser.isLogin, modelRambutController.print);
 
 module.exports = router;

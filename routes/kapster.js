@@ -8,5 +8,6 @@ roter.post("/store", verifyUser.isLogin, kapsterController.store);
 roter.get("/edit/:id", verifyUser.isLogin, kapsterController.edit);
 roter.put("/update/:id", verifyUser.isLogin, kapsterController.update);
 roter.delete("/destroy/:id", verifyUser.isLogin, kapsterController.destroy);
+roter.get("/print", verifyUser.isLogin, kapsterController.print);
 
 module.exports = roter;

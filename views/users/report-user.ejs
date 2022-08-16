@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Data User</title>
+</head>
+<style>
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        text-align: center;
+    }
+
+    .h {
+        padding-bottom: 1px;
+    }
+</style>
+
+<body>
+    <table style="border: none" width="100%">
+        <tr style="border: none">
+            <td style="border: none">
+                <p style="line-height: 1em ">
+                    <h3>
+                        <center>ROYAL BARBER SHOP</center>
+                    </h3>
+                </p>
+            </td>
+        </tr>
+    </table>
+    <hr>
+    <center>
+        <h4>Data User
+        </h4>
+    </center>
+
+    <table class="table table-hover small" id="table-data-penginapan" width="100%">
+        <thead>
+            <tr>
+                <th>
+                    No</th>
+                <th>
+                    Nama</th>
+                <th>
+                    Email</th>
+                <th>
+                    No Telp</th>
+                <th>
+                    Alamat</th>
+                <th>
+                    Role</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <% datas.data.forEach((element,index) => { %>
+            <tr>
+                <td>
+                    <h6><%= index+1 %> </h6>
+                </td>
+                <td>
+                    <p><%= element.nama %></p>
+                </td>
+                <td>
+                    <p><%= element.email %></p>
+
+                </td>
+                <td>
+                    <p><%= element.no_telp %></p>
+
+                </td>
+                <td>
+                    <p><%= element.alamat %>
+
+                </td>
+                <td>
+                    <%= element.role %></p>
+                </td>
+            </tr>
+            <% }) %>
+
+        </tbody>
+    </table>
+    <table style="width: 100%; border: none;">
+        <tr>
+            <td style="width: 30%;text-align: center; border: none;">
+
+            </td>
+            <td style="width: 40%;border: none;"></td>
+            <td style="width: 30%;text-align: center;border: none;">
+                <br>
+                <br>
+                <br>
+
+                <br>
+                Padang, <%= datas.tanggalSekarang %>
+                <br>
+                <br>
+                <br>
+                <u>Owner</u>
+            </td>
+        </tr>
+    </table>
+
+
+</body>
+
+</html>

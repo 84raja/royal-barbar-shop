@@ -8,5 +8,6 @@ router.post("/store", verifyUser.isLogin, servicesController.store);
 router.get("/edit/:id", verifyUser.isLogin, servicesController.edit);
 router.put("/update/:id", verifyUser.isLogin, servicesController.update);
 router.delete("/destroy/:id", verifyUser.isLogin, servicesController.destroy);
+router.get("/print", verifyUser.isLogin, servicesController.print);
 
 module.exports = router;

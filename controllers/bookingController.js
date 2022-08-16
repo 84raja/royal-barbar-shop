@@ -3,11 +3,12 @@ const User = require("../models/userModel");
 const Kapster = require("../models/kapsterModel");
 const Service = require("../models/serviceModel");
 const Jadwal = require("../models/jadwalModel");
+const log = require("../models/log");
+
 let pdf = require("html-pdf");
 let path = require("path");
 let ejs = require("ejs");
 const fs = require("fs");
-const log = require("../models/log");
 
 function fnTanggal() {
   const today = new Date();

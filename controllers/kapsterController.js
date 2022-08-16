@@ -1,4 +1,21 @@
 const Kapster = require("../models/kapsterModel");
+let pdf = require("html-pdf");
+let path = require("path");
+let ejs = require("ejs");
+const fs = require("fs");
+
+function fnTanggal() {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1; // Months start at 0!
+  let dd = today.getDate();
+
+  if (dd < 10) dd = "0" + dd;
+  if (mm < 10) mm = "0" + mm;
+
+  const tanggal = `${yyyy}-${mm}-${dd}`;
+  return tanggal;
+}
 
 module.exports = {
   index: (req, res) => {
@@ -83,5 +100,68 @@ module.exports = {
       req.flash("success", "Berhasil menghapus data kapster !");
       res.redirect("/kapster");
     });
+  },
+
+  print: async (req, res) => {
+    function getKapster() {
+      return new Promise((resolve, reject) => {
+        Kapster.getAll(req.db, (err, kapsters) => {
+          if (err) {
+            reject(console.log(err));
+          }
+          const data = kapsters.map((kapster) => {
+            return {
+              id: kapster.id,
+              nama: kapster.nama.toUpperCase(),
+              no_telp: kapster.no_telp,
+              alamat: kapster.alamat,
+            };
+          });
+          resolve(data);
+        });
+      });
+    }
+
+    if (fs.existsSync(`report-kapster.pdf`)) {
+      fs.unlink(`report-kapster.pdf`, (err) => {
+        if (err) throw err;
+        console.log("successfully deleted");
+      });
+    }
+    const data = {
+      data: await getKapster(),
+      tanggalSekarang: fnTanggal(),
+    };
+    console.log(data);
+
+    ejs.renderFile(
+      path.join(__dirname, "../views/kapster", "report-kapster.ejs"),
+      { datas: data },
+      (err, data) => {
+        if (err) {
+          res.send(err);
+        } else {
+          let options = {
+            height: "11.25in",
+            width: "8.5in",
+            header: {
+              height: "20mm",
+            },
+            footer: {
+              height: "20mm",
+            },
+          };
+          pdf
+            .create(data, options)
+            .toFile("report-kapster.pdf", function (err, data) {
+              if (err) {
+                res.send(err);
+              } else {
+                res.download("report-kapster.pdf");
+              }
+            });
+        }
+      }
+    );
   },
 };
